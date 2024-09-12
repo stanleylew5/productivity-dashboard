@@ -9,8 +9,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        dash: {
+          "orange-100": "#FFE6B9",
+          "orange-200": "#D9C1AC",
+          "black-100": "#03040A",
+        },
       },
     },
   },
