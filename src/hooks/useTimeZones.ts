@@ -14,7 +14,7 @@ const useTimeZones = () => {
         );
         setTimeZones(response.data);
         setLoading(false);
-      } catch (err) {
+      } catch (error) {
         setError("Error fetching time zones");
         setLoading(false);
       }
