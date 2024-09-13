@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
-import { doc, setDoc } from "firebase/firestore"; // Firestore imports
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 
 // Define NextAuth options
@@ -17,14 +17,13 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user }) {
       try {
-        // Store user data in Firestore on sign-in
-        const userRef = doc(db, "users", user.id!); // Firestore document with user's email as the ID
+        const userRef = doc(db, "users", user.id!);
         await setDoc(
           userRef,
           {
             name: user.name,
             email: user.email,
-            city: "", // Placeholder for user city
+            city: "",
             timezone: "",
             services: {
               spotify: false,
@@ -32,25 +31,23 @@ export const authOptions: NextAuthOptions = {
             },
           },
           { merge: true },
-        ); // Use merge to update if document exists
+        );
 
-        return true; // Return true to proceed with the sign-in
+        return true;
       } catch (error) {
         console.error("Error storing user in Firestore:", error);
-        return false; // Return false if storing fails to prevent sign-in
+        return false;
       }
     },
 
     async session({ session, token }) {
-      // Safely check if session and session.user exist
       if (session?.user) {
-        session.user.id = token.sub; // Add user's ID to the session
+        session.user.id = token.sub;
       }
       return session;
     },
   },
 };
 
-// Export NextAuth route handler
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

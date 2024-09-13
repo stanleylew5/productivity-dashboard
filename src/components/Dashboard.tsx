@@ -8,11 +8,12 @@ import { db } from "@/utils/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import dashboard from "../../public/dash.webp";
-import TimeZoneSelect from "./TimeZoneSelect";
+import TimeZoneSelect from "./clock/TimeZoneSelect";
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const [city, setCity] = useState("");
+  const [timezone, setTimeZone] = useState("");
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -32,6 +33,24 @@ const Dashboard = () => {
     } catch (error) {
       toast.error("Error Ocurred");
     }
+  };
+
+  const handleTimeZone = async () => {
+    if (!session?.user.id) return;
+    try {
+      const userRef = doc(db, "users", session.user.id);
+
+      await updateDoc(userRef, {
+        timezone: timezone,
+      });
+      toast.success("Time Zone Updated");
+    } catch (error) {
+      toast.error("Error Ocurred");
+    }
+  };
+
+  const handleTimeZoneSelect = (selectedTimeZone: string) => {
+    setTimeZone(selectedTimeZone); // Set the selected timezone from TimeZoneSelect
   };
 
   if (status === "loading") {
@@ -56,7 +75,8 @@ const Dashboard = () => {
           <p className="text-[4.5vw] leading-none tracking-wider">00:00:00</p>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-8 px-[2vw] py-[3.5vh]">
+
+      <div className="grid grid-cols-4 gap-8 px-[2vw] py-[3.25vh]">
         <div className="flex flex-col items-center rounded-xl bg-dash-orange-100 bg-opacity-20">
           <p className="pt-2 text-[1.8vw]">Upcoming</p>
           <p className="text-[1.8vw] leading-none">Events</p>
@@ -65,12 +85,22 @@ const Dashboard = () => {
           <p className="text-[9.5vw] leading-none">11:11:11</p>
           <p className="text-[9.5vw] leading-none">PM</p>
         </div>
-        <div className="rounded-xl bg-dash-orange-100 bg-opacity-20">e</div>
+        <div className="flex items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+          Coming Soon
+        </div>
       </div>
-      <div className="mx-[10vw] h-[10vh] rounded-xl bg-dash-orange-100 opacity-20"></div>
-      <div className="flex flex-col bg-dash-black-100 text-dash-orange-100">
-        <p>Welcome, {session?.user?.name}!</p>
-        <button onClick={handleSignOut}>Sign out</button>
+      <div className="mx-[10vw] flex h-[10vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+        <p className="text-dash-orange-200">Coming Soon</p>
+      </div>
+
+      <div className="mt-8 flex flex-col bg-dash-black-100 text-dash-orange-100">
+        <p className="pb-4">Welcome, {session?.user?.name}!</p>
+        <button
+          onClick={handleSignOut}
+          className="rounded-xl border-2 border-dash-orange-100 bg-dash-black-100 p-2"
+        >
+          Sign out
+        </button>
         <input
           type="text"
           placeholder="Enter your city"
@@ -78,7 +108,12 @@ const Dashboard = () => {
           onChange={(e) => setCity(e.target.value)}
           className="custom-input" // temporary styling for readability
         />
-        <button onClick={handleCityUpdate}>Update City</button>
+        <button
+          onClick={handleCityUpdate}
+          className="rounded-xl border-2 border-dash-orange-100 bg-dash-black-100 p-2"
+        >
+          Update City
+        </button>
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -90,7 +125,13 @@ const Dashboard = () => {
           pauseOnHover
           theme="dark"
         />
-        <TimeZoneSelect />
+        <TimeZoneSelect onSelect={handleTimeZoneSelect} />
+        <button
+          onClick={handleTimeZone}
+          className="rounded-xl border-2 border-dash-orange-100 bg-dash-black-100 p-2"
+        >
+          Update Time Zone
+        </button>
       </div>
     </div>
   );

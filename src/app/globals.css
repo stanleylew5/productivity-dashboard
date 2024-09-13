@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 .custom-input {
   background-color: #03040a;
   color: #d9c1ac;
@@ -77,4 +78,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4a4a4a;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #121212;
 }

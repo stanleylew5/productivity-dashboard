@@ -12,7 +12,7 @@ const useTimeZones = () => {
         const response = await axios.get(
           "https://timeapi.io/api/TimeZone/AvailableTimeZones",
         );
-        setTimeZones(response.data); // Assuming it returns an array of time zones
+        setTimeZones(response.data);
         setLoading(false);
       } catch (err) {
         setError("Error fetching time zones");

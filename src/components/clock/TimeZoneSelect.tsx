@@ -6,20 +6,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import useTimeZones from "../hooks/useTimeZones";
+import useTimeZones from "../../hooks/useTimeZones";
 
-const TimeZoneSelect = () => {
+interface TimeZoneSelectProps {
+  onSelect: (timezone: string) => void;
+}
+
+const TimeZoneSelect: React.FC<TimeZoneSelectProps> = ({ onSelect }) => {
   const { timeZones, loading, error } = useTimeZones();
   const [selectedTimeZone, setSelectedTimeZone] = useState<string>("");
 
   if (loading) return <p>Loading time zones...</p>;
   if (error) return <p>{error}</p>;
 
+  const handleSelectChange = (value: string) => {
+    setSelectedTimeZone(value);
+    onSelect(value);
+  };
+
   return (
-    <Select
-      value={selectedTimeZone}
-      onValueChange={(value) => setSelectedTimeZone(value)}
-    >
+    <Select value={selectedTimeZone} onValueChange={handleSelectChange}>
       <SelectTrigger>
         <SelectValue placeholder="Select a timezone" />
       </SelectTrigger>
