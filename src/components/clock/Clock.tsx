@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { db } from "@/lib/firebase";
 
 const formatTime = (timeString: string) => {
   const [hours, minutes] = timeString.split(":").map(Number);

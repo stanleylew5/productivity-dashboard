@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { db } from "@/lib/firebase";
 
 // Define NextAuth options
 export const authOptions: NextAuthOptions = {
