@@ -53,7 +53,6 @@ export function SelectTime() {
     if (!session?.user.id) return;
     try {
       const userRef = doc(db, "users", session.user.id);
-
       await updateDoc(userRef, {
         timezone: selectedTimeZone,
       });
@@ -142,11 +141,7 @@ export function SelectTime() {
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
-        closeOnClick
         rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
         theme="dark"
       />
     </Form>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Krona_One } from "next/font/google";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import Session from "@/components/Session";
 
 const kronaOne = Krona_One({

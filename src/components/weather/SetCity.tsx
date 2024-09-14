@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,7 +20,7 @@ import { db } from "@/lib/firebase";
 import { useState } from "react";
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
+  city: z.string().min(2, {
     message: "City must be at least 2 characters.",
   }),
 });
@@ -32,7 +31,7 @@ export function SetCity() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      city: "",
     },
   });
 
@@ -40,7 +39,6 @@ export function SetCity() {
     if (!session?.user.id) return;
     try {
       const userRef = doc(db, "users", session.user.id);
-
       await updateDoc(userRef, {
         city: city,
       });
@@ -58,7 +56,7 @@ export function SetCity() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="city"
           render={({ field }) => (
             <FormItem>
               <FormLabel>City</FormLabel>
@@ -83,11 +81,7 @@ export function SetCity() {
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
-        closeOnClick
         rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
         theme="dark"
       />
     </Form>
