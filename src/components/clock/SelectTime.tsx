@@ -4,7 +4,7 @@ import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -58,7 +58,7 @@ export function SelectTime() {
       });
       toast.success("Time Zone Updated");
     } catch (error) {
-      toast.error("Error Ocurred");
+      toast.error("Error Occurred");
     }
   };
 
@@ -137,13 +137,6 @@ export function SelectTime() {
         />
         <Button type="submit">Update Time Zone</Button>
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        rtl={false}
-        theme="dark"
-      />
     </Form>
   );
 }

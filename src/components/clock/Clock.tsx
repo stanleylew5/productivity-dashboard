@@ -15,7 +15,13 @@ const formatTime = (timeString: string) => {
 
   const amPm = date.getHours() >= 12 ? "PM" : "AM";
 
-  return `${hours12}:${minutesFormatted} ${amPm}`;
+  return (
+    <>
+      {hours12}:{minutesFormatted}
+      <br />
+      {amPm}
+    </>
+  );
 };
 
 const Clock = () => {

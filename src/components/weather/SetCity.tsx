@@ -77,13 +77,6 @@ export function SetCity() {
         />
         <Button type="submit">Update City</Button>
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        rtl={false}
-        theme="dark"
-      />
     </Form>
   );
 }

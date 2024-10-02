@@ -3,8 +3,10 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import dashboard from "../../public/dash.webp";
 import Clock from "./clock/Clock";
-import Settings from "./Settings";
+import { IoMdSettings } from "react-icons/io";
 import Weather from "./weather/Weather";
+import Events from "./events/Events";
+import Link from "next/link";
 const Dashboard = () => {
   const { status } = useSession();
 
@@ -32,8 +34,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-4 gap-8 px-[2vw] py-[3.25vh]">
         <div className="flex flex-col items-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-          <p className="pt-2 text-[1.8vw]">Upcoming</p>
-          <p className="text-[1.8vw] leading-none">Events</p>
+          <Events />
         </div>
         <div className="col-span-2 rounded-xl bg-dash-orange-100 bg-opacity-20 py-[12vh]">
           <Clock />
@@ -45,7 +46,11 @@ const Dashboard = () => {
       <div className="mx-[10vw] flex h-[10vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
         <p className="text-dash-orange-200">Coming Soon</p>
       </div>
-      <Settings />
+      <button className="absolute bottom-12 right-12 text-[4vw]">
+        <Link href="/settings">
+          <IoMdSettings />
+        </Link>
+      </button>
     </div>
   );
 };
