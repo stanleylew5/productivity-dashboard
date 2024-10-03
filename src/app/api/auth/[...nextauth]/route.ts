@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
@@ -36,7 +37,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     // Store and refresh the access token in the JWT
-    async jwt({ token, account }) {
+    async jwt({ token, account }: any) {
       // Initial sign in
       if (account) {
         token.accessToken = account.access_token as string;
@@ -51,7 +52,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Access token has expired, so refresh it
-      return refreshAccessToken(token);
+      return await refreshAccessToken(token); // Temporarily casting token as `any`
     },
 
     async signIn({ user }) {

@@ -7,7 +7,6 @@ const Timer = () => {
   const [inputTime, setInputTime] = useState(""); // Input for setting time
   const [isRunning, setIsRunning] = useState(false); // Running status
   const [isPaused, setIsPaused] = useState(false); // Paused status
-  const [isSetter, setIsSetter] = useState(false);
   // Timer logic to decrement the time
   useEffect(() => {
     let interval: NodeJS.Timeout;

@@ -15,18 +15,12 @@ const formatTime = (timeString: string) => {
 
   const amPm = date.getHours() >= 12 ? "PM" : "AM";
 
-  return (
-    <>
-      {hours12}:{minutesFormatted}
-      <br />
-      {amPm}
-    </>
-  );
+  return `${hours12}:${minutesFormatted} ${amPm}`;
 };
 
 const Clock = () => {
   const { data: session } = useSession();
-  const [time, setTime] = useState<string>("");
+  const [time, setTime] = useState<string>(""); // state as string
   const [timeZone, setTimeZone] = useState<string>("");
 
   useEffect(() => {
@@ -59,7 +53,7 @@ const Clock = () => {
           `https://timeapi.io/api/Time/current/zone?timeZone=${timeZone}`,
         );
         const { time } = response.data;
-        setTime(formatTime(time));
+        setTime(formatTime(time)); // `formatTime()` now returns a string
       } catch (error) {
         console.error("Error fetching time:", error);
       }
@@ -70,7 +64,7 @@ const Clock = () => {
     const intervalId = setInterval(fetchTime, 1000); // Update the time every second
 
     return () => clearInterval(intervalId); // Cleanup interval on unmount
-  }, [timeZone]); //refetches if timeZone changes
+  }, [timeZone]); // Refetches if timeZone changes
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
