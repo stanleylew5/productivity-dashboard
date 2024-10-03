@@ -26,13 +26,13 @@ Stay updated with the current weather in your city, with data fetched dynamicall
 
 Displays the current time and time zone information based on user preferences.
 
+### Built-in Pomodoro Timer (Coming Soon)
+
+Manage your work sessions effectively with an integrated Pomodoro timer that helps you maintain focus and take regular breaks.
+
 ### Spotify API (Coming Soon)
 
 Control your Spotify queue, play, and pause music directly from the dashboard.
-
-### Built-in Pomodoro Timer
-
-Manage your work sessions effectively with an integrated Pomodoro timer that helps you maintain focus and take regular breaks.
 
 ## Authentication
 
