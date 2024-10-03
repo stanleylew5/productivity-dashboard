@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import type NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
     accessToken?: string | null;
-    error?: string | null; // Add the error property here
+    error?: string | null;
     user: {
       id?: string | null;
       name?: string | null;
@@ -14,8 +14,8 @@ declare module "next-auth" {
 
   interface JWT {
     accessToken?: string | null;
-    refreshToken?: string | null; // Add refreshToken if you're using it
-    accessTokenExpires?: number; // Track when the access token expires
-    error?: string | null; // Track error state if the token refresh fails
+    refreshToken?: string | null;
+    accessTokenExpires?: number;
+    error?: string | null;
   }
 }

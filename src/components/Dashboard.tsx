@@ -7,6 +7,7 @@ import { IoMdSettings } from "react-icons/io";
 import Weather from "./weather/Weather";
 import Events from "./events/Events";
 import Link from "next/link";
+
 const Dashboard = () => {
   const { status } = useSession();
 
