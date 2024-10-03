@@ -1,40 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Productivity Dashboard
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+<br/>
+![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=white)
+![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
 
-First, run the development server:
+## Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A full-stack web application designed to streamline your daily workflow by centralizing frequently used apps into a single dashboard for easy access. This dashboard is tailored for desktop screens and provides integrations with a variety of services to help you stay organized and productive. This application was created to consolidate all the apps and tools that are frequently checked throughout the day into one simple hub. By using this dashboard, users can save time switching between apps and increase productivity by having everything they need in one place.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Google Calendar Integration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+View your upcoming events directly from your Google Calendar without leaving the dashboard.
 
-## Learn More
+### Weather API Integration
 
-To learn more about Next.js, take a look at the following resources:
+Stay updated with the current weather in your city, with data fetched dynamically and stored in Firestore.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Time API Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Displays the current time and time zone information based on user preferences.
 
-## Deploy on Vercel
+### Spotify API (Coming Soon)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Control your Spotify queue, play, and pause music directly from the dashboard.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Built-in Pomodoro Timer
+
+Manage your work sessions effectively with an integrated Pomodoro timer that helps you maintain focus and take regular breaks.
+
+## Authentication
+
+- Google OAuth with NextAuth -- Secure login with your Google account to ensure personalized access and data security.
+
+## Data Management
+
+- Firestore Database -- Stores user-specific data such as city, time zone, and other settings for a customized experience.
+
+## Figma File
+
+[Productivity Dashboard Figma Design File](https://www.figma.com/design/irfTxN9Co5K7FnqzDAURoW/Productivity-Dashboard?node-id=0-1&t=K4RBuyMneL6GRmAx-1)
 
 ## APIs Utilized
 
 https://timeapi.io/
+https://www.weatherapi.com/
+https://developers.google.com/calendar/api/guides/overview
