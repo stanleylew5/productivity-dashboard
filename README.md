@@ -48,6 +48,6 @@ Manage your work sessions effectively with an integrated Pomodoro timer that hel
 
 ## APIs Utilized
 
-https://timeapi.io/
-https://www.weatherapi.com/
-https://developers.google.com/calendar/api/guides/overview
+- https://timeapi.io/
+- https://www.weatherapi.com/
+- https://developers.google.com/calendar/api/guides/overview
