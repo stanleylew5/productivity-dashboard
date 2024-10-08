@@ -7,7 +7,7 @@ import { IoMdSettings } from "react-icons/io";
 import Weather from "./weather/Weather";
 import Events from "./events/Events";
 import Link from "next/link";
-
+/* import Timer from "./timer/Timer"; */
 const Dashboard = () => {
   const { status } = useSession();
 
@@ -29,7 +29,8 @@ const Dashboard = () => {
           <Weather />
         </div>
         <div className="flex flex-col items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-          <p className="text-[4.5vw] leading-none tracking-wider">00:00:00</p>
+          {/*<p className="text-[4.5vw] leading-none tracking-wider">00:00:00</p>*/}
+          {/* <Timer /> */}
         </div>
       </div>
 

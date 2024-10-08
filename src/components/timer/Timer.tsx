@@ -1,12 +1,18 @@
 import { FaCirclePause, FaCirclePlay } from "react-icons/fa6";
 import { RiRestartFill } from "react-icons/ri";
 import { useState, useEffect } from "react";
-
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 const Timer = () => {
   const [time, setTime] = useState(0); // Time in seconds
   const [inputTime, setInputTime] = useState(""); // Input for setting time
   const [isRunning, setIsRunning] = useState(false); // Running status
   const [isPaused, setIsPaused] = useState(false); // Paused status
+  /* const [isEnteringTime, setIsEnteringTime] = useState(false); // Entering time status */
   // Timer logic to decrement the time
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -102,6 +108,22 @@ const Timer = () => {
           </button>
         )}
       </div>
+      <InputOTP maxLength={6} className="text-5xl text-dash-orange-200">
+        <InputOTPGroup>
+          <InputOTPSlot index={5} />
+          <InputOTPSlot index={4} />
+        </InputOTPGroup>
+        <InputOTPSeparator />
+        <InputOTPGroup>
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={2} />
+        </InputOTPGroup>
+        <InputOTPSeparator />
+        <InputOTPGroup>
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={0} />
+        </InputOTPGroup>
+      </InputOTP>
     </div>
   );
 };
