@@ -23,10 +23,10 @@ const Weather = () => {
         if (docSnap.exists()) {
           const userData = docSnap.data();
           if (userData.city && userData.city !== "") {
-            setCity(userData.city); // Use city from Firestore if it exists
+            setCity(userData.city);
           } else {
             setCity("Los Angeles"); // Fallback to default
-            await setDoc(userRef, { city: "Los Angeles" }, { merge: true }); // Only set if city is not in Firestore
+            await setDoc(userRef, { city: "Los Angeles" }, { merge: true });
           }
         } else {
           console.error("No such document!");
@@ -44,15 +44,9 @@ const Weather = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.weatherapi.com/v1/current.json`,
-          {
-            params: {
-              key: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
-              q: city,
-            },
-          },
-        );
+        const response = await axios.get(`/api/weather`, {
+          params: { city },
+        });
         const data = response.data;
         const region = data.location.region;
         const updatedTime = data.current.last_updated;
