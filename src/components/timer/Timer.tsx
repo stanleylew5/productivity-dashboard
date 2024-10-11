@@ -1,18 +1,48 @@
+"use client";
 import { FaCirclePause, FaCirclePlay } from "react-icons/fa6";
 import { RiRestartFill } from "react-icons/ri";
 import { useState, useEffect } from "react";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
+import { useSession } from "next-auth/react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
 const Timer = () => {
+  const { data: session } = useSession();
+  const [receivedTime, setReceivedTime] = useState<number | null>(null); // Time fetched in minutes
   const [time, setTime] = useState(0); // Time in seconds
-  const [inputTime, setInputTime] = useState(""); // Input for setting time
   const [isRunning, setIsRunning] = useState(false); // Running status
   const [isPaused, setIsPaused] = useState(false); // Paused status
-  /* const [isEnteringTime, setIsEnteringTime] = useState(false); // Entering time status */
+
+  // Fetch the timer from Firestore
+  useEffect(() => {
+    const fetchTimerInfo = async () => {
+      if (!session?.user?.id) return;
+      try {
+        const userRef = doc(db, "users", session.user.id);
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          const fetchedTime = userData.timer || 0; // Fetched time in minutes
+          setReceivedTime(fetchedTime);
+        } else {
+          console.error("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchTimerInfo();
+  }, [session?.user?.id]);
+
+  // Update the `time` in seconds based on receivedTime (fetched from Firestore)
+  useEffect(() => {
+    if (receivedTime !== null) {
+      setTime(receivedTime * 60); // Convert minutes to seconds
+    }
+  }, [receivedTime]);
+
   // Timer logic to decrement the time
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -23,72 +53,47 @@ const Timer = () => {
     }
 
     if (time === 0) {
-      setIsRunning(false); // Stop when time is up
+      setIsRunning(false);
     }
 
     return () => clearInterval(interval);
   }, [isRunning, isPaused, time]);
 
-  // Handle setting time from input
-  const handleTimeSet = () => {
-    const seconds = parseInt(inputTime, 10);
-    if (!isNaN(seconds) && seconds >= 0) {
-      setTime(seconds);
-      setIsRunning(false);
-    }
-    setInputTime("");
-  };
-
   // Format time to HR:MM:SS
   const formatTime = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor(seconds / 60)
+    const hrs = Math.floor(seconds / 3600)
+      .toString()
+      .padStart(2, "0");
+    const mins = Math.floor((seconds % 3600) / 60)
       .toString()
       .padStart(2, "0");
     const secs = (seconds % 60).toString().padStart(2, "0");
     return `${hrs}:${mins}:${secs}`;
   };
+
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-80 rounded-lg p-8 text-center shadow-md">
-        <div
-          className="cursor-pointer text-5xl font-bold"
-          onClick={() => !isRunning && setIsPaused(false)}
-        >
+      <div className="rounded-lg pt-4 text-center">
+        <div className="cursor-pointer text-6xl font-bold">
           {formatTime(time)}
         </div>
-        {/*<p className="text-[4.5vw] leading-none tracking-wider">00:00:00</p>*/}
-        {!isRunning && (
-          <div className="mt-4">
-            <input
-              type="number"
-              placeholder="Set time (in seconds)"
-              value={inputTime}
-              onChange={(e) => setInputTime(e.target.value)}
-              className="w-full rounded border border-gray-300 p-2"
-            />
-            <button
-              className="mt-2 w-full rounded bg-blue-500 py-2 text-white hover:bg-blue-600"
-              onClick={handleTimeSet}
-            >
-              Set Time
-            </button>
-          </div>
-        )}
-
         {isRunning ? (
-          <div className="mt-4 flex justify-between">
+          <div className="mt-4 flex justify-center">
             <button
-              className="rounded bg-yellow-500 px-4 py-2 text-white hover:bg-yellow-600"
+              className="mr-2 rounded py-2 text-[2vw] text-dash-orange-200 hover:text-dash-orange-100"
               onClick={() => setIsPaused(!isPaused)}
             >
               {isPaused ? <FaCirclePlay /> : <FaCirclePause />}
             </button>
             <button
-              className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+              className="ml-2 rounded text-[2.35vw] text-dash-orange-200 hover:text-dash-orange-100"
               onClick={() => {
-                setIsRunning(false);
-                setTime(0);
+                if (receivedTime !== null) {
+                  // Reset time to fetched value from Firestore (in seconds)
+                  setTime(receivedTime * 60);
+                  setIsRunning(false);
+                  setIsPaused(false);
+                }
               }}
             >
               <RiRestartFill />
@@ -108,22 +113,6 @@ const Timer = () => {
           </button>
         )}
       </div>
-      <InputOTP maxLength={6} className="text-5xl text-dash-orange-200">
-        <InputOTPGroup>
-          <InputOTPSlot index={5} />
-          <InputOTPSlot index={4} />
-        </InputOTPGroup>
-        <InputOTPSeparator />
-        <InputOTPGroup>
-          <InputOTPSlot index={3} />
-          <InputOTPSlot index={2} />
-        </InputOTPGroup>
-        <InputOTPSeparator />
-        <InputOTPGroup>
-          <InputOTPSlot index={1} />
-          <InputOTPSlot index={0} />
-        </InputOTPGroup>
-      </InputOTP>
     </div>
   );
 };

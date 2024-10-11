@@ -67,6 +67,7 @@ export const authOptions: NextAuthOptions = {
               spotify: false,
               googleCalendar: true,
             },
+            timer: 30,
           },
           { merge: true },
         );

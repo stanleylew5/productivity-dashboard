@@ -73,7 +73,7 @@ export function SelectTime() {
           name="timeZone"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Time Zones</FormLabel>
+              <FormLabel>Time Zone</FormLabel>
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
