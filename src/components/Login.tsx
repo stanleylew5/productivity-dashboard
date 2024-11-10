@@ -18,7 +18,11 @@ const Login = () => {
   }, [status, router]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-dash-black-100">
+        <div className="px-8 py-4 text-dash-orange-200">Loading...</div>
+      </div>
+    );
   }
 
   return (
