@@ -17,14 +17,14 @@ const Events = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      if (!session?.accessToken) return;
+      if (!session?.googleAccessToken) return;
       try {
         // Step 1: Fetch all calendars
         const calendarListResponse = await axios.get(
           "https://www.googleapis.com/calendar/v3/users/me/calendarList",
           {
             headers: {
-              Authorization: `Bearer ${session.accessToken}`,
+              Authorization: `Bearer ${session.googleAccessToken}`,
             },
           },
         );
@@ -45,7 +45,7 @@ const Events = () => {
               `https://www.googleapis.com/calendar/v3/calendars/${calendar.id}/events`,
               {
                 headers: {
-                  Authorization: `Bearer ${session.accessToken}`,
+                  Authorization: `Bearer ${session.googleAccessToken}`,
                 },
                 params: {
                   maxResults: 3, // Optional: limit per calendar if you want
@@ -79,7 +79,7 @@ const Events = () => {
     fetchEvents();
     const intervalId = setInterval(fetchEvents, 60000); // Refresh every 60 seconds
     return () => clearInterval(intervalId);
-  }, [session?.accessToken]);
+  }, [session?.googleAccessToken]);
 
   return (
     <div className="flex flex-col items-center">

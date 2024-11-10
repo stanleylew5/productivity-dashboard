@@ -68,7 +68,7 @@ const Clock = () => {
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <p className="text-[9.5vw] leading-none">{time}</p>
+      <p className="text-[10vw] leading-none">{time}</p>
     </div>
   );
 };

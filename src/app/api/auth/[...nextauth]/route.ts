@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import SpotifyProvider from "next-auth/providers/spotify";
 import { NextAuthOptions } from "next-auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -22,37 +23,56 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+    SpotifyProvider({
+      clientId: process.env.SPOTIFY_CLIENT_ID,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope:
+            "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-email user-read-private",
+          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/spotify",
+        },
+      },
+    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    // Include the access token in the session
     async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.sub as string;
-        session.accessToken = token.accessToken as string;
+        session.googleAccessToken = token.googleAccessToken as string;
+        session.spotifyAccessToken = token.spotifyAccessToken as string;
         session.error = token.error as string | null;
       }
       return session;
     },
 
-    // Store and refresh the access token in the JWT
     async jwt({ token, account }: any) {
       // Initial sign in
       if (account) {
-        token.accessToken = account.access_token as string;
-        token.refreshToken = account.refresh_token as string; // Store the refresh token
-        token.accessTokenExpires =
-          Date.now() + (account.expires_in as number) * 1000; // Expiration time
+        if (account.provider === "google") {
+          token.googleAccessToken = account.access_token as string;
+          token.googleRefreshToken = account.refresh_token as string;
+          token.googleExpiresAt = Date.now() + (account.expires_in as number) * 1000;
+        } else if (account.provider === "spotify") {
+          token.spotifyAccessToken = account.access_token as string;
+          token.spotifyRefreshToken = account.refresh_token as string;
+          token.spotifyExpiresAt = Date.now() + (account.expires_in as number) * 1000;
+        }
       }
 
-      // Return the previous token if the access token has not expired yet
-      if (Date.now() < (token.accessTokenExpires as number)) {
-        return token;
+      // Check if Google token needs to be refreshed
+      if (Date.now() >= (token.googleExpiresAt as number)) {
+        token = await refreshAccessToken(token, "google");
       }
 
-      // Access token has expired, so refresh it
-      return await refreshAccessToken(token); // Temporarily casting token as `any`
+      // Check if Spotify token needs to be refreshed
+      if (Date.now() >= (token.spotifyExpiresAt as number)) {
+        token = await refreshAccessToken(token, "spotify");
+      }
+
+      return token;
     },
 
     async signIn({ user }) {
@@ -81,24 +101,44 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-// Function to refresh the access token
-async function refreshAccessToken(token: JWT): Promise<JWT> {
+// Function to refresh the access token based on provider
+async function refreshAccessToken(token: JWT, provider: string): Promise<JWT> {
   try {
-    const response = await axios.post("https://oauth2.googleapis.com/token", {
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      refresh_token: token.refreshToken, // Access refreshToken from JWT
-      grant_type: "refresh_token",
-    });
-
-    const refreshedTokens = response.data;
-
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000, // New expiration time
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
-    };
+    if (provider === "google") {
+      const response = await axios.post("https://oauth2.googleapis.com/token", {
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        refresh_token: token.googleRefreshToken,
+        grant_type: "refresh_token",
+      });
+      const refreshedTokens = response.data;
+      return {
+        ...token,
+        googleAccessToken: refreshedTokens.access_token,
+        googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
+        googleRefreshToken: refreshedTokens.refresh_token ?? token.googleRefreshToken,
+      };
+    } else if (provider === "spotify") {
+      const response = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        null,
+        {
+          params: {
+            grant_type: "refresh_token",
+            refresh_token: token.spotifyRefreshToken,
+            client_id: process.env.SPOTIFY_CLIENT_ID,
+            client_secret: process.env.SPOTIFY_CLIENT_SECRET,
+          },
+        },
+      );
+      const refreshedTokens = response.data;
+      return {
+        ...token,
+        spotifyAccessToken: refreshedTokens.access_token,
+        spotifyExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
+        spotifyRefreshToken: refreshedTokens.refresh_token ?? token.spotifyRefreshToken,
+      };
+    }
   } catch (error) {
     console.error("Error refreshing access token", error);
     return {

@@ -1,13 +1,15 @@
 "use client";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
+import { useSession, signIn } from "next-auth/react";
 import dashboard from "../../public/dash.webp";
-import Clock from "./clock/Clock";
 import { IoMdSettings } from "react-icons/io";
+import Clock from "./clock/Clock";
 import Weather from "./weather/Weather";
 import Events from "./events/Events";
-import Link from "next/link";
 import Timer from "./timer/Timer";
+import Queue from "./queue/Queue";
+import Image from "next/image";
+import Link from "next/link";
+
 const Dashboard = () => {
   const { status } = useSession();
 
@@ -29,7 +31,6 @@ const Dashboard = () => {
           <Weather />
         </div>
         <div className="flex flex-col items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-          {/*<p className="text-[4.5vw] leading-none tracking-wider">00:00:00</p>*/}
           <Timer />
         </div>
       </div>
@@ -42,13 +43,14 @@ const Dashboard = () => {
           <Clock />
         </div>
         <div className="flex items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-          Coming Soon
+          <Queue />
         </div>
       </div>
-      <div className="mx-[10vw] flex h-[10vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-        <p className="text-dash-orange-200">Coming Soon</p>
+      <div className="mx-[10vw] flex h-[9vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+        
+        <button onClick={() => signIn("spotify")}>Log in with Spotify</button>
       </div>
-      <button className="absolute bottom-12 right-12 text-[4vw]">
+      <button className="absolute bottom-[4vh] right-12 text-[4vw]">
         <Link href="/settings">
           <IoMdSettings />
         </Link>
