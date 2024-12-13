@@ -21,7 +21,7 @@ const Events = () => {
         console.error("No Google access token found in session.");
         return;
       }
-  
+
       try {
         // Fetch all calendars
         const calendarListResponse = await axios.get(
@@ -32,14 +32,15 @@ const Events = () => {
             },
           },
         );
-  
+
         const calendars = calendarListResponse.data.items;
         console.log("Calendars fetched:", calendars);
-  
+
         const allEvents: CalendarEvent[] = [];
         for (const calendar of calendars) {
           if (
-            calendar.id !== "addressbook#contacts@group.v.calendar.google.com" &&
+            calendar.id !==
+              "addressbook#contacts@group.v.calendar.google.com" &&
             calendar.id !== "en.usa#holiday@group.v.calendar.google.com"
           ) {
             try {
@@ -59,35 +60,37 @@ const Events = () => {
               );
               const calendarEvents = eventsResponse.data.items || [];
               allEvents.push(...calendarEvents);
-              console.log(`Events from calendar ${calendar.id}:`, calendarEvents);
+              console.log(
+                `Events from calendar ${calendar.id}:`,
+                calendarEvents,
+              );
             } catch (eventError) {
               console.error(
                 `Error fetching events for calendar ${calendar.id}:`,
-                eventError
+                eventError,
               );
             }
           }
         }
-  
+
         // Sort events by start time
         const sortedEvents = allEvents.sort((a, b) => {
           const dateA = new Date(a.start?.dateTime || "").getTime();
           const dateB = new Date(b.start?.dateTime || "").getTime();
           return dateA - dateB;
         });
-  
+
         const upcomingEvents = sortedEvents.slice(0, 3);
         setEvents(upcomingEvents);
       } catch (error) {
         console.error("Error fetching Google Calendar events:", error);
       }
     };
-  
+
     fetchEvents();
     const intervalId = setInterval(fetchEvents, 60000);
     return () => clearInterval(intervalId);
   }, [session?.googleAccessToken]);
-  
 
   return (
     <div className="flex flex-col items-center">

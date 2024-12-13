@@ -10,6 +10,10 @@ import Queue from "./queue/Queue";
 import Image from "next/image";
 import Link from "next/link";
 
+const handleLogin = async (provider: "google" | "spotify") => {
+  await signIn(provider, { callbackUrl: "/" });
+};
+
 const Dashboard = () => {
   const { status } = useSession();
 
@@ -42,15 +46,19 @@ const Dashboard = () => {
         <div className="col-span-2 rounded-xl bg-dash-orange-100 bg-opacity-20 py-[12vh]">
           <Clock />
         </div>
-        <div className="flex items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+        <div className="rounded-xl bg-dash-orange-100 bg-opacity-20">
           <Queue />
         </div>
       </div>
       <div className="mx-[10vw] flex h-[9vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
-        
-        <button onClick={() => signIn("spotify")}>Log in with Spotify</button>
+        <button onClick={() => handleLogin("spotify")}>
+          Log in with Spotify
+        </button>
+        <button onClick={() => handleLogin("google")}>
+          Log in with Google
+        </button>
       </div>
-      <button className="absolute bottom-[4vh] right-12 text-[4vw]">
+      <button className="absolute bottom-[2vh] right-12 text-[4vw]">
         <Link href="/settings">
           <IoMdSettings />
         </Link>

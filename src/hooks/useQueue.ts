@@ -9,7 +9,6 @@ interface QueueTrack {
 
 const useSpotifyQueue = (accessToken: string | null) => {
   const [queue, setQueue] = useState<QueueTrack[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,7 +16,6 @@ const useSpotifyQueue = (accessToken: string | null) => {
 
     const fetchQueue = async () => {
       try {
-        setLoading(true);
         const response = await fetch(
           "https://api.spotify.com/v1/me/player/queue",
           {
@@ -35,8 +33,6 @@ const useSpotifyQueue = (accessToken: string | null) => {
         setQueue(data.queue.slice(0, 3));
       } catch (error) {
         setError("Error fetching queue");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -46,7 +42,7 @@ const useSpotifyQueue = (accessToken: string | null) => {
     return () => clearInterval(interval);
   }, [accessToken]);
 
-  return { queue, loading, error };
+  return { queue, error };
 };
 
 export default useSpotifyQueue;

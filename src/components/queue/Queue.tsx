@@ -6,27 +6,26 @@ import Image from "next/image";
 
 const Queue = () => {
   const { data: session } = useSession();
-  const { currentTrack, loading, error } = useSpotifyCurrentlyPlaying();
+  const { currentTrack, error } = useSpotifyCurrentlyPlaying();
 
   if (!session) {
     return <p>Please log in to see your Spotify queue.</p>;
   }
-  if (loading) return <p>Loading time zones...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="mx-auto max-w-md rounded-lg bg-black bg-opacity-50 p-6 text-white">
+    <div className="flex justify-center rounded-lg bg-dash-black-100 py-4 text-dash-orange-100 drop-shadow-xl">
       {currentTrack && (
-        <div className="mb-8 text-center">
+        <div className="flex flex-col items-center justify-center text-center">
           <Image
             src={currentTrack.item.album.images[0].url}
             alt="Album Cover"
-            className="mx-auto mb-4 rounded-lg"
-            width={400}
-            height={400}
+            className="mb-4 rounded-lg"
+            width={160}
+            height={160}
           />
-          <h2 className="text-xl font-semibold">{currentTrack.item.name}</h2>
-          <p className="text-sm text-gray-300">
+          <p className="text-md">{currentTrack.item.name}</p>
+          <p className="text-xs text-dash-orange-100">
             {currentTrack.item.artists.map((artist) => artist.name).join(", ")}
           </p>
         </div>

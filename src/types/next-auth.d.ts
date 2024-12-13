@@ -5,6 +5,8 @@ declare module "next-auth" {
   interface Session {
     googleAccessToken?: string | null;
     spotifyAccessToken?: string | null;
+    googleExpiresAt?: number | null;
+    spotifyExpiresAt?: number | null;
     error?: string | null;
     user: {
       id?: string | null;
