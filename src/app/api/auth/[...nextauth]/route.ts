@@ -7,8 +7,8 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import axios from "axios";
 import { JWT } from "next-auth";
+import { Session } from "node_modules/next-auth/core/types";
 
-// Define NextAuth options
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -78,11 +78,11 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      if (Date.now() >= (token.googleExpiresAt as number)) {
+      const BUFFER_TIME = 5 * 60 * 1000; // 5 minutes
+      if (Date.now() + BUFFER_TIME >= (token.googleExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "google");
       }
-
-      if (Date.now() >= (token.spotifyExpiresAt as number)) {
+      if (Date.now() + BUFFER_TIME >= (token.spotifyExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "spotify");
       }
 
@@ -133,7 +133,6 @@ export const authOptions: NextAuthOptions = {
           },
           { merge: true },
         );
-
         return true;
       } catch (error) {
         console.error("Error storing user in Firestore:", error);
@@ -146,7 +145,7 @@ export const authOptions: NextAuthOptions = {
 // Function to refresh the access token based on provider
 async function refreshAccessToken(
   token: JWT,
-  session: any,
+  session: Session,
   provider: string,
 ): Promise<JWT> {
   try {
