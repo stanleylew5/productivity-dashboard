@@ -1,18 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
-interface QueueTrack {
+interface Track {
   name: string;
   artists: { name: string }[];
   album: { images: { url: string }[] };
 }
 
-const useSpotifyQueue = (accessToken: string | null) => {
-  const [queue, setQueue] = useState<QueueTrack[]>([]);
-  const [error, setError] = useState<string | null>(null);
+const useSpotifyQueue = () => {
+  const { data: session } = useSession();
+  const [queue, setQueue] = useState<Track[]>([]);
+  const [errorQueue, setErrorQueue] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!accessToken) return;
+    if (!session?.spotifyAccessToken) return;
 
     const fetchQueue = async () => {
       try {
@@ -20,7 +22,7 @@ const useSpotifyQueue = (accessToken: string | null) => {
           "https://api.spotify.com/v1/me/player/queue",
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${session.spotifyAccessToken}`,
             },
           },
         );
@@ -32,7 +34,7 @@ const useSpotifyQueue = (accessToken: string | null) => {
         const data = await response.json();
         setQueue(data.queue.slice(0, 3));
       } catch (error) {
-        setError("Error fetching queue");
+        setErrorQueue("Error fetching queue");
       }
     };
 
@@ -40,9 +42,9 @@ const useSpotifyQueue = (accessToken: string | null) => {
 
     const interval = setInterval(fetchQueue, 1000);
     return () => clearInterval(interval);
-  }, [accessToken]);
+  }, [session.spotifyAccessToken]);
 
-  return { queue, error };
+  return { queue, errorQueue };
 };
 
 export default useSpotifyQueue;

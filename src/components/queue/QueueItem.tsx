@@ -6,18 +6,24 @@ type QueueItemProps = {
   artist: string;
 };
 
-const QueueItem: React.FC<QueueItemProps> = ({ albumUrl, songName, artist }) => {
+const QueueItem: React.FC<QueueItemProps> = ({
+  albumUrl,
+  songName,
+  artist,
+}) => {
   return (
-    <div className="flex flex-row items-center justify-center text-center">
+    <div className="mx-4 mt-4 grid grid-cols-4 items-center gap-3 rounded-xl bg-dash-black-100 px-[1vw]">
       <Image
         src={albumUrl}
         alt="Album Cover"
-        className="mb-4 rounded-lg"
-        width={160}
-        height={160}
+        className="my-[1vh] w-[6vh] rounded-lg"
+        width={70}
+        height={70}
       />
-      <p className="text-md font-semibold">{songName}</p>
-      <p className="text-xs text-gray-500">{artist}</p>
+      <div className="col-span-3">
+        <p className="text-[0.75vw] text-dash-orange-200">{songName}</p>
+        <p className="row-span-3 text-[0.6vw] text-dash-orange-200">{artist}</p>
+      </div>
     </div>
   );
 };

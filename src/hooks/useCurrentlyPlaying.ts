@@ -13,7 +13,7 @@ interface Track {
 const useSpotifyCurrentlyPlaying = () => {
   const { data: session } = useSession();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errorCurrPlay, setErrorCurrPlay] = useState<string | null>(null);
 
   useEffect(() => {
     if (!session?.spotifyAccessToken) return;
@@ -36,8 +36,7 @@ const useSpotifyCurrentlyPlaying = () => {
         const data = await response.json();
         setCurrentTrack(data);
       } catch (error) {
-        setError("Error fetching currently playing track");
-      } finally {
+        setErrorCurrPlay("Error fetching currently playing track");
       }
     };
 
@@ -47,7 +46,7 @@ const useSpotifyCurrentlyPlaying = () => {
     return () => clearInterval(interval);
   }, [session.spotifyAccessToken]);
 
-  return { currentTrack, error };
+  return { currentTrack, errorCurrPlay };
 };
 
 export default useSpotifyCurrentlyPlaying;
