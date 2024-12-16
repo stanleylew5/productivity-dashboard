@@ -78,14 +78,12 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      const BUFFER_TIME = 5 * 60 * 1000; // 5 minutes
-      if (Date.now() + BUFFER_TIME >= (token.googleExpiresAt as number)) {
+      if (Date.now() < (token.googleExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "google");
       }
-      if (Date.now() + BUFFER_TIME >= (token.spotifyExpiresAt as number)) {
+      if (Date.now() < (token.spotifyExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "spotify");
       }
-
       return token;
     },
 
@@ -116,8 +114,14 @@ export const authOptions: NextAuthOptions = {
               account.provider === "spotify"
                 ? account.access_token
                 : currentData.spotifyAccessToken,
-            googleExpiresAt: Date.now() + 3500 * 1000,
-            spotifyExpiresAt: Date.now() + 3500 * 1000,
+            googleExpiresAt:
+              account.provider === "google"
+                ? Date.now() + account.expires_at * 1000
+                : Date.now() + 3500 * 1000,
+            spotifyExpiresAt:
+              account.provider === "spotify"
+                ? Date.now() + account.expires_at * 1000
+                : Date.now() + 3500 * 1000,
           },
           { merge: true },
         );

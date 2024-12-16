@@ -36,7 +36,7 @@ const useSpotifyCurrentlyPlaying = () => {
         const data = await response.json();
         setCurrentTrack(data);
       } catch (error) {
-        setErrorCurrPlay("Error fetching currently playing track");
+        setErrorCurrPlay("No currently playing track");
       }
     };
 

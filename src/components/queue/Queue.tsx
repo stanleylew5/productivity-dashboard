@@ -15,7 +15,8 @@ const Queue = () => {
     return <p>Please log in to see your Spotify queue.</p>;
   }
   if (errorQueue) return <p>{errorQueue}</p>;
-  if (errorCurrPlay) return <p>{errorCurrPlay}</p>;
+  if (errorCurrPlay)
+    return <p className="flex justify-center pt-[1vh]">{errorCurrPlay}</p>;
 
   return (
     <div className="rounded-lg py-4 text-dash-orange-100 drop-shadow-xl">
