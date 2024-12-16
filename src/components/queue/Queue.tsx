@@ -1,9 +1,9 @@
 "use client";
-2;
 import { useSession } from "next-auth/react";
 import useSpotifyCurrentlyPlaying from "@/hooks/useCurrentlyPlaying";
 import useSpotifyQueue from "@/hooks/useQueue";
 import Image from "next/image";
+import note from "../../../public/note.png";
 import QueueItem from "./QueueItem";
 
 const Queue = () => {
@@ -20,24 +20,36 @@ const Queue = () => {
     <div className="rounded-lg py-4 text-dash-orange-100 drop-shadow-xl">
       {currentTrack && (
         <div className="flex flex-col items-center justify-center text-center">
-          <Image
-            src={currentTrack.item.album.images[0].url}
-            alt="Album Cover"
-            className="mb-4 w-[9vw] rounded-lg"
-            width={160}
-            height={160}
-          />
+          {currentTrack.item.album.images?.[0]?.url ? (
+            <Image
+              src={currentTrack.item.album.images[0].url}
+              alt="Album Cover"
+              className="mb-4 w-[9vw] rounded-lg"
+              width={160}
+              height={160}
+            />
+          ) : (
+            <div className="mb-4 flex w-[9vw] h-[9vw] items-center justify-center rounded-lg bg-dash-gray-100">
+              <Image
+                src={note}
+                alt="What is going on here"
+                className="w-12 h-12"
+                width={48}
+                height={48}
+              />
+            </div>
+          )}
           <p className="text-md">{currentTrack.item.name}</p>
           <p className="text-xs text-dash-orange-100">
             {currentTrack.item.artists.map((artist) => artist.name).join(", ")}
           </p>
         </div>
       )}
-      <div className="">
+      <div>
         {queue.map((track, index) => (
           <QueueItem
             key={index}
-            albumUrl={track.album.images[index].url}
+            albumUrl={track.album.images?.[index]?.url || note}
             songName={track.name}
             artist={track.artists.map((artist) => artist.name).join(", ")}
           />

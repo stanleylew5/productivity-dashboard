@@ -7,6 +7,7 @@ import Weather from "./weather/Weather";
 import Events from "./events/Events";
 import Timer from "./timer/Timer";
 import Queue from "./queue/Queue";
+import SpotifyControls from "./spotifycontrols/SpotifyControls";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -34,7 +35,6 @@ const Dashboard = () => {
           <Timer />
         </div>
       </div>
-
       <div className="grid grid-cols-4 gap-8 px-[2vw] py-[2.5vh]">
         <div className="flex flex-col items-center rounded-xl bg-dash-orange-100 bg-opacity-20">
           <Events />
@@ -46,7 +46,9 @@ const Dashboard = () => {
           <Queue />
         </div>
       </div>
-      <div className="mx-[10vw] flex h-[9vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20"></div>
+      <div className="mx-[10vw] flex h-[9vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+        <SpotifyControls />
+      </div>
       <button className="absolute bottom-[2vh] right-12 text-[4vw]">
         <Link href="/settings">
           <IoMdSettings />

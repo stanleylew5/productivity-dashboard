@@ -23,6 +23,7 @@ const config: Config = {
           "orange-100": "#FFE6B9",
           "orange-200": "#D9C1AC",
           "black-100": "#03040A",
+          "gray-100": "#282828",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
