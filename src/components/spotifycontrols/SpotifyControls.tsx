@@ -17,21 +17,25 @@ const SpotifyControls = () => {
     <div>
       <button
         onClick={skipToPrevious}
-        className="text-dash-orange-200 text-[2vw] pr-4"
+        className="pr-4 text-[2vw] text-dash-orange-200"
       >
-        <BiSolidSkipPreviousCircle/>
+        <BiSolidSkipPreviousCircle />
       </button>
       <button
         onClick={togglePlayback}
-        className="text-dash-orange-200 text-[2vw]"
+        className="text-[2vw] text-dash-orange-200"
       >
-        {isPlaying ? <FaPauseCircle/> : <FaCirclePlay className="text-[2vw]"/>}
+        {isPlaying ? (
+          <FaPauseCircle />
+        ) : (
+          <FaCirclePlay className="text-[2vw]" />
+        )}
       </button>
       <button
         onClick={skipToNext}
-        className="text-dash-orange-200 text-[2vw] pl-4"
+        className="pl-4 text-[2vw] text-dash-orange-200"
       >
-        <BiSolidSkipNextCircle/>
+        <BiSolidSkipNextCircle />
       </button>
     </div>
   );

@@ -68,11 +68,13 @@ export const authOptions: NextAuthOptions = {
         if (account.provider === "google") {
           token.googleAccessToken = account.access_token as string;
           token.googleRefreshToken = account.refresh_token as string;
-          token.googleExpiresAt = Date.now() + (account.expires_in as number) * 1000;
+          token.googleExpiresAt =
+            Date.now() + (account.expires_in as number) * 1000;
         } else if (account.provider === "spotify") {
           token.spotifyAccessToken = account.access_token as string;
           token.spotifyRefreshToken = account.refresh_token as string;
-          token.spotifyExpiresAt = Date.now() + (account.expires_in as number) * 1000;
+          token.spotifyExpiresAt =
+            Date.now() + (account.expires_in as number) * 1000;
         }
       }
 

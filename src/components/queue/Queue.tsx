@@ -14,6 +14,7 @@ const Queue = () => {
   if (!session) {
     return <p>Please log in to see your Spotify queue.</p>;
   }
+  if (errorQueue) return <p>{errorQueue}</p>;
   if (errorCurrPlay) return <p>{errorCurrPlay}</p>;
 
   return (

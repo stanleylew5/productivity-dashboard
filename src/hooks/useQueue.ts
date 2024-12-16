@@ -18,7 +18,9 @@ const useSpotifyQueue = () => {
 
     const fetchQueue = async () => {
       try {
-        const response = await fetch("https://api.spotify.com/v1/me/player/queue", {
+        const response = await fetch(
+          "https://api.spotify.com/v1/me/player/queue",
+          {
             headers: {
               Authorization: `Bearer ${session.spotifyAccessToken}`,
             },

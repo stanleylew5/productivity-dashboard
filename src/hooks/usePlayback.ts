@@ -39,7 +39,7 @@ const usePlayback = () => {
           headers: {
             Authorization: `Bearer ${session.spotifyAccessToken}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
