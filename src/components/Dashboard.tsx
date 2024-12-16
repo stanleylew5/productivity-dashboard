@@ -27,7 +27,7 @@ const Dashboard = () => {
         className="absolute z-[-1] h-screen w-screen"
       />
 
-      <div className="grid grid-cols-2 gap-20 px-[10vw] pt-[3vh]">
+      <div className="grid grid-cols-2 gap-20 px-[10vw] pt-[2vh]">
         <div className="rounded-xl bg-dash-orange-100 bg-opacity-20">
           <Weather />
         </div>
@@ -46,7 +46,7 @@ const Dashboard = () => {
           <Queue />
         </div>
       </div>
-      <div className="mx-[10vw] flex h-[9vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
+      <div className="mx-[10vw] flex h-[8vh] items-center justify-center rounded-xl bg-dash-orange-100 bg-opacity-20">
         <SpotifyControls />
       </div>
       <button className="absolute bottom-[2vh] right-12 text-[4vw]">

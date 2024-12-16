@@ -68,13 +68,11 @@ export const authOptions: NextAuthOptions = {
         if (account.provider === "google") {
           token.googleAccessToken = account.access_token as string;
           token.googleRefreshToken = account.refresh_token as string;
-          token.googleExpiresAt =
-            Date.now() + (account.expires_in as number) * 1000;
+          token.googleExpiresAt = Date.now() + (account.expires_in as number) * 1000;
         } else if (account.provider === "spotify") {
           token.spotifyAccessToken = account.access_token as string;
           token.spotifyRefreshToken = account.refresh_token as string;
-          token.spotifyExpiresAt =
-            Date.now() + (account.expires_in as number) * 1000;
+          token.spotifyExpiresAt = Date.now() + (account.expires_in as number) * 1000;
         }
       }
 
@@ -94,18 +92,6 @@ export const authOptions: NextAuthOptions = {
         const userRef = doc(db, "users", user.email!);
         const userDoc = await getDoc(userRef);
         const currentData = userDoc.exists() ? userDoc.data() : {};
-
-        const googleExpiresAt =
-          account.provider === "google" &&
-          typeof account.expires_in === "number"
-            ? Date.now() + account.expires_in * 1000
-            : currentData.googleExpiresAt || Date.now() + 3500 * 1000;
-
-        const spotifyExpiresAt =
-          account.provider === "spotify" &&
-          typeof account.expires_in === "number"
-            ? Date.now() + account.expires_in * 1000
-            : currentData.spotifyExpiresAt || Date.now() + 3500 * 1000;
 
         await setDoc(
           userRef,
@@ -128,8 +114,8 @@ export const authOptions: NextAuthOptions = {
               account.provider === "spotify"
                 ? account.access_token
                 : currentData.spotifyAccessToken,
-            googleExpiresAt,
-            spotifyExpiresAt,
+            googleExpiresAt: Date.now() + 3500 * 1000,
+            spotifyExpiresAt: Date.now() + 3500 * 1000,
           },
           { merge: true },
         );
