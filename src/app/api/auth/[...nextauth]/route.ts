@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
         params: {
           scope:
             "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-email user-read-private",
-          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/spotify",
         },
       },
     }),
