@@ -92,45 +92,41 @@ export const authOptions: NextAuthOptions = {
         const userRef = doc(db, "users", user.email!);
         const userDoc = await getDoc(userRef);
         const currentData = userDoc.exists() ? userDoc.data() : {};
-
-        await setDoc(
-          userRef,
-          {
-            name: user.name,
-            email: user.email,
-            services: {
-              spotify:
-                currentData.services?.spotify || account.provider === "spotify",
-              googleCalendar:
-                currentData.services?.googleCalendar ||
-                account.provider === "google",
-            },
-            timer: currentData.timer || 30,
-            googleAccessToken:
-              account.provider === "google"
-                ? account.access_token
-                : currentData.googleAccessToken,
-            spotifyAccessToken:
-              account.provider === "spotify"
-                ? account.access_token
-                : currentData.spotifyAccessToken,
-            googleExpiresAt:
-              account.provider === "google"
-                ? Date.now() + account.expires_at * 1000
-                : Date.now() + 3500 * 1000,
-            spotifyExpiresAt:
-              account.provider === "spotify"
-                ? Date.now() + account.expires_at * 1000
-                : Date.now() + 3500 * 1000,
+    
+        const updateData: any = {
+          name: user.name,
+          email: user.email,
+          services: {
+            spotify:
+              currentData.services?.spotify || account.provider === "spotify",
+            googleCalendar:
+              currentData.services?.googleCalendar ||
+              account.provider === "google",
           },
-          { merge: true },
-        );
+          timer: currentData.timer || 30,
+        };
+    
+        // Conditionally add fields based on the provider
+        if (account.provider === "google") {
+          updateData.googleAccessToken = account.access_token;
+          updateData.googleExpiresAt = Date.now() + account.expires_at * 1000;
+          updateData.googleRefreshToken = account.refresh_token;
+        }
+    
+        if (account.provider === "spotify") {
+          updateData.spotifyAccessToken = account.access_token;
+          updateData.spotifyExpiresAt = Date.now() + account.expires_at * 1000;
+          updateData.spotifyRefreshToken = account.refresh_token;
+        }
+    
+        await setDoc(userRef, updateData, { merge: true });
         return true;
       } catch (error) {
         console.error("Error storing user in Firestore:", error);
         return false;
       }
     },
+    
   },
 };
 
@@ -146,7 +142,7 @@ async function refreshAccessToken(
       const response = await axios.post("https://oauth2.googleapis.com/token", {
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        refresh_token: token.googleRefreshToken,
+        refresh_token: session.googleRefreshToken,
         grant_type: "refresh_token",
       });
       refreshedTokens = response.data;
@@ -158,7 +154,8 @@ async function refreshAccessToken(
           userRef,
           {
             googleAccessToken: refreshedTokens.access_token,
-            googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
+            googleRefreshToken: refreshedTokens.refresh_token,
+            googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000, 
           },
           { merge: true },
         );
@@ -168,8 +165,7 @@ async function refreshAccessToken(
         ...token,
         googleAccessToken: refreshedTokens.access_token,
         googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
-        googleRefreshToken:
-          refreshedTokens.refresh_token ?? token.googleRefreshToken,
+        googleRefreshToken: refreshedTokens.refresh_token,
       };
     } else if (provider === "spotify") {
       const response = await axios.post(
@@ -178,7 +174,7 @@ async function refreshAccessToken(
         {
           params: {
             grant_type: "refresh_token",
-            refresh_token: token.spotifyRefreshToken,
+            refresh_token: session.spotifyRefreshToken,
             client_id: process.env.SPOTIFY_CLIENT_ID,
             client_secret: process.env.SPOTIFY_CLIENT_SECRET,
           },
@@ -193,6 +189,7 @@ async function refreshAccessToken(
           userRef,
           {
             spotifyAccessToken: refreshedTokens.access_token,
+            spotifyRefreshToken: refreshedTokens.refresh_token,
             spotifyExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
           },
           { merge: true },
@@ -203,8 +200,7 @@ async function refreshAccessToken(
         ...token,
         spotifyAccessToken: refreshedTokens.access_token,
         spotifyExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
-        spotifyRefreshToken:
-          refreshedTokens.refresh_token ?? token.spotifyRefreshToken,
+        spotifyRefreshToken: refreshedTokens.refresh_token,
       };
     }
   } catch (error) {

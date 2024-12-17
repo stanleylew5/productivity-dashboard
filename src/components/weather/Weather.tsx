@@ -17,7 +17,7 @@ const Weather = () => {
       if (!session?.user.id) return;
 
       try {
-        const userRef = doc(db, "users", session.user.id);
+        const userRef = doc(db, "users", session.user.email);
         const docSnap = await getDoc(userRef);
 
         if (docSnap.exists()) {

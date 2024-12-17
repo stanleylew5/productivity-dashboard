@@ -34,7 +34,7 @@ const useSpotifyQueue = () => {
         const data = await response.json();
         setQueue(data.queue.slice(0, 3));
       } catch (error) {
-        setErrorQueue("Error fetching queue");
+        setErrorQueue("No currently playing song");
       }
     };
 

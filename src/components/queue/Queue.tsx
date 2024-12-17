@@ -14,14 +14,14 @@ const Queue = () => {
   if (!session) {
     return <p>Please log in to see your Spotify queue.</p>;
   }
-  if (errorQueue) return <p>{errorQueue}</p>;
+  if (errorQueue) return <p className="flex justify-center pt-[1vh]">{errorQueue}</p>;
   if (errorCurrPlay)
     return <p className="flex justify-center pt-[1vh]">{errorCurrPlay}</p>;
 
   return (
     <div className="rounded-lg py-4 text-dash-orange-100 drop-shadow-xl">
       {currentTrack && (
-        <div className="flex flex-col items-center justify-center text-center">
+        <div className="flex flex-col items-center justify-center text-center px-[0.2vw]">
           {currentTrack.item.album.images?.[0]?.url ? (
             <Image
               src={currentTrack.item.album.images[0].url}
@@ -31,7 +31,7 @@ const Queue = () => {
               height={160}
             />
           ) : (
-            <div className="mb-4 flex h-[9vw] w-[9vw] items-center justify-center rounded-lg bg-dash-gray-100">
+            <div className="mb-4 flex h-[9vw] w-[9vw] items-center justify-center rounded-lg bg-dash-gray-100 px-[0.2vw]">
               <Image
                 src={note}
                 alt="Missing Album Fallback"
