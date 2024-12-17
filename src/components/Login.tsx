@@ -42,7 +42,7 @@ const Login = () => {
         <div className="rounded-md border-2 border-white bg-dash-orange-200 px-[10vw] py-[4vh] text-purple-950">
           {!session && (
             <button
-              onClick={() => signIn("spotify")}
+              onClick={() => signIn("google")}
               className="flex flex-row items-center gap-4 text-4xl"
             >
               Sign in with Google
