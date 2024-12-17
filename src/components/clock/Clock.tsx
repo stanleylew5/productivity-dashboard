@@ -27,7 +27,7 @@ const Clock = () => {
     const fetchTimeZone = async () => {
       if (!session?.user?.id) return;
       try {
-        const userRef = doc(db, "users", session.user.id);
+        const userRef = doc(db, "users", session.user.email);
         const docSnap = await getDoc(userRef);
 
         if (docSnap.exists()) {
@@ -68,7 +68,7 @@ const Clock = () => {
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <p className="text-[9.5vw] leading-none">{time}</p>
+      <p className="text-[10vw] leading-none">{time}</p>
     </div>
   );
 };

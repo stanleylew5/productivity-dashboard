@@ -3,7 +3,12 @@ import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    accessToken?: string | null;
+    googleAccessToken?: string | null;
+    spotifyAccessToken?: string | null;
+    googleRefreshToken?: string | null;
+    spotifyRefreshToken?: string | null;
+    googleExpiresAt?: number | null;
+    spotifyExpiresAt?: number | null;
     error?: string | null;
     user: {
       id?: string | null;
@@ -14,9 +19,13 @@ declare module "next-auth" {
   }
 
   interface JWT {
-    accessToken?: string | null;
-    refreshToken?: string | null;
-    accessTokenExpires?: number;
+    googleAccessToken?: string | null;
+    spotifyAccessToken?: string | null;
+    googleRefreshToken?: string | null;
+    spotifyRefreshToken?: string | null;
+    googleExpiresAt?: number;
+    spotifyExpiresAt?: number;
     error?: string | null;
+    provider?: string;
   }
 }

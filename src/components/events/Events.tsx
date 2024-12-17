@@ -17,69 +17,80 @@ const Events = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      if (!session?.accessToken) return;
+      if (!session?.googleAccessToken) {
+        console.error("No Google access token found in session.");
+        return;
+      }
+
       try {
-        // Step 1: Fetch all calendars
+        // Fetch all calendars
         const calendarListResponse = await axios.get(
           "https://www.googleapis.com/calendar/v3/users/me/calendarList",
           {
             headers: {
-              Authorization: `Bearer ${session.accessToken}`,
+              Authorization: `Bearer ${session.googleAccessToken}`,
             },
           },
         );
 
         const calendars = calendarListResponse.data.items;
-        console.log("Calendars:", calendars);
+        console.log("Calendars fetched:", calendars);
 
         const allEvents: CalendarEvent[] = [];
         for (const calendar of calendars) {
-          console.log(
-            `https://www.googleapis.com/calendar/v3/calendars/${calendar.id}/events`,
-          );
           if (
-            calendar.id != "addressbook#contacts@group.v.calendar.google.com" &&
-            calendar.id != "en.usa#holiday@group.v.calendar.google.com"
+            calendar.id !==
+              "addressbook#contacts@group.v.calendar.google.com" &&
+            calendar.id !== "en.usa#holiday@group.v.calendar.google.com"
           ) {
-            const eventsResponse = await axios.get(
-              `https://www.googleapis.com/calendar/v3/calendars/${calendar.id}/events`,
-              {
-                headers: {
-                  Authorization: `Bearer ${session.accessToken}`,
+            try {
+              const eventsResponse = await axios.get(
+                `https://www.googleapis.com/calendar/v3/calendars/${calendar.id}/events`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${session.googleAccessToken}`,
+                  },
+                  params: {
+                    maxResults: 3,
+                    orderBy: "startTime",
+                    singleEvents: true,
+                    timeMin: new Date().toISOString(),
+                  },
                 },
-                params: {
-                  maxResults: 3, // Optional: limit per calendar if you want
-                  orderBy: "startTime",
-                  singleEvents: true,
-                  timeMin: new Date().toISOString(), // Use current date for upcoming events
-                },
-              },
-            );
-            const calendarEvents = eventsResponse.data.items || [];
-            allEvents.push(...calendarEvents);
+              );
+              const calendarEvents = eventsResponse.data.items || [];
+              allEvents.push(...calendarEvents);
+              console.log(
+                `Events from calendar ${calendar.id}:`,
+                calendarEvents,
+              );
+            } catch (eventError) {
+              console.error(
+                `Error fetching events for calendar ${calendar.id}:`,
+                eventError,
+              );
+            }
           }
         }
 
-        // Step 3: Sort events by start time
+        // Sort events by start time
         const sortedEvents = allEvents.sort((a, b) => {
           const dateA = new Date(a.start?.dateTime || "").getTime();
           const dateB = new Date(b.start?.dateTime || "").getTime();
           return dateA - dateB;
         });
 
-        // Step 4: Take the most recent 3 events
         const upcomingEvents = sortedEvents.slice(0, 3);
-
         setEvents(upcomingEvents);
       } catch (error) {
-        console.error("Error fetching Google Calendar events", error);
+        console.error("Error fetching Google Calendar events:", error);
       }
     };
 
     fetchEvents();
-    const intervalId = setInterval(fetchEvents, 60000); // Refresh every 60 seconds
+    const intervalId = setInterval(fetchEvents, 60000);
     return () => clearInterval(intervalId);
-  }, [session?.accessToken]);
+  }, [session?.googleAccessToken]);
 
   return (
     <div className="flex flex-col items-center">
