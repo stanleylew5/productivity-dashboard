@@ -19,7 +19,6 @@ export const authOptions: NextAuthOptions = {
           scope:
             "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.readonly",
           access_type: "offline",
-          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/google",
         },
       },
     }),
@@ -56,7 +55,6 @@ export const authOptions: NextAuthOptions = {
             `No Firestore document found for user: ${session.user.email}`,
           );
         }
-
         session.error = token.error as string | null;
       }
 
