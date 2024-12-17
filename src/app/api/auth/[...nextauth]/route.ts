@@ -19,6 +19,7 @@ export const authOptions: NextAuthOptions = {
           scope:
             "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.readonly",
           access_type: "offline",
+          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/google",
         },
       },
     }),
@@ -29,6 +30,7 @@ export const authOptions: NextAuthOptions = {
         params: {
           scope:
             "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-email user-read-private",
+          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/spotify",
         },
       },
     }),
@@ -114,13 +116,21 @@ export const authOptions: NextAuthOptions = {
         if (account.provider === "google") {
           updateData.googleAccessToken = account.access_token;
           updateData.googleExpiresAt = Date.now() + account.expires_at * 1000;
-          // updateData.googleRefreshToken = account.refresh_token;
         }
 
         if (account.provider === "spotify") {
           updateData.spotifyAccessToken = account.access_token;
           updateData.spotifyExpiresAt = Date.now() + account.expires_at * 1000;
           updateData.spotifyRefreshToken = account.refresh_token;
+
+          const response = await axios.get("https://api.spotify.com/v1/me", {
+            headers: {
+              Authorization: `Bearer ${account.access_token}`,
+            },
+          });
+
+          const spotifyData = response.data;
+          updateData.spotifyId = spotifyData.id;
         }
 
         await setDoc(userRef, updateData, { merge: true });
