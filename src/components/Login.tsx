@@ -4,6 +4,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import loginbg from "../../public/login.jpg";
+import dashboard from "../../public/dashboard.jpg";
 import clock from "../../public/clock.png";
 import Image from "next/image";
 
@@ -29,7 +30,7 @@ const Login = () => {
     <div>
       <Image
         className="absolute z-[-1] h-screen w-screen"
-        src={loginbg}
+        src={dashboard}
         alt="loginbg"
       />
       <div className="flex flex-col items-center justify-center text-white">

@@ -80,9 +80,15 @@ export const authOptions: NextAuthOptions = {
 
       if (Date.now() < (token.googleExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "google");
+        session.googleAccessToken = token.googleAccessToken;
+        session.googleRefreshToken = token.googleRefreshToken;
+        session.googleExpiresAt = token.googleExpiresAt;
       }
       if (Date.now() < (token.spotifyExpiresAt as number)) {
         token = await refreshAccessToken(token, session, "spotify");
+        session.spotifyAccessToken = token.spotifyAccessToken;
+        session.spotifyRefreshToken = token.spotifyRefreshToken;
+        session.spotifyExpiresAt = token.spotifyExpiresAt;
       }
       return token;
     },
@@ -110,7 +116,7 @@ export const authOptions: NextAuthOptions = {
         if (account.provider === "google") {
           updateData.googleAccessToken = account.access_token;
           updateData.googleExpiresAt = Date.now() + account.expires_at * 1000;
-          updateData.googleRefreshToken = account.refresh_token;
+          // updateData.googleRefreshToken = account.refresh_token;
         }
     
         if (account.provider === "spotify") {
