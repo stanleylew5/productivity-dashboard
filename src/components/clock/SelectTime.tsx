@@ -52,7 +52,7 @@ export function SelectTime() {
   const handleTimeZone = async () => {
     if (!session?.user.id) return;
     try {
-      const userRef = doc(db, "users", session.user.id);
+      const userRef = doc(db, "users", session.user.email);
       await updateDoc(userRef, {
         timezone: selectedTimeZone,
       });

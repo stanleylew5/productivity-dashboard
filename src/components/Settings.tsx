@@ -1,11 +1,16 @@
 "use client";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { SelectTime } from "./clock/SelectTime";
 import { SetCity } from "./weather/SetCity";
 import { SetTime } from "./timer/SetTime";
 import Link from "next/link";
+
+const handleLogin = async (provider: "google" | "spotify") => {
+  await signIn(provider, { callbackUrl: "/" });
+};
+
 const Settings = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -32,6 +37,21 @@ const Settings = () => {
         </div>
         <div className="pb-4">
           <SetTime />
+        </div>
+        <div>
+          <button
+            onClick={() => handleLogin("spotify")}
+            className="mb-4 rounded-xl border-2 border-dash-orange-200 p-2"
+          >
+            Log in with Spotify
+          </button>
+          <br />
+          <button
+            onClick={() => handleLogin("google")}
+            className="rounded-xl border-2 border-dash-orange-200 p-2"
+          >
+            Log in with Google
+          </button>
         </div>
       </div>
 
