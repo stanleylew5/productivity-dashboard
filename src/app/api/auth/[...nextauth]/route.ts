@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
         params: {
           scope:
             "user-read-playback-state user-read-currently-playing user-modify-playback-state user-read-email user-read-private",
-          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/spotify",
         },
       },
     }),
@@ -97,7 +96,7 @@ export const authOptions: NextAuthOptions = {
         const userRef = doc(db, "users", user.email!);
         const userDoc = await getDoc(userRef);
         const currentData = userDoc.exists() ? userDoc.data() : {};
-    
+
         const updateData: any = {
           name: user.name,
           email: user.email,
@@ -110,20 +109,20 @@ export const authOptions: NextAuthOptions = {
           },
           timer: currentData.timer || 30,
         };
-    
+
         // Conditionally add fields based on the provider
         if (account.provider === "google") {
           updateData.googleAccessToken = account.access_token;
           updateData.googleExpiresAt = Date.now() + account.expires_at * 1000;
           // updateData.googleRefreshToken = account.refresh_token;
         }
-    
+
         if (account.provider === "spotify") {
           updateData.spotifyAccessToken = account.access_token;
           updateData.spotifyExpiresAt = Date.now() + account.expires_at * 1000;
           updateData.spotifyRefreshToken = account.refresh_token;
         }
-    
+
         await setDoc(userRef, updateData, { merge: true });
         return true;
       } catch (error) {
@@ -131,7 +130,6 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
     },
-    
   },
 };
 
@@ -160,7 +158,7 @@ async function refreshAccessToken(
           {
             googleAccessToken: refreshedTokens.access_token,
             googleRefreshToken: refreshedTokens.refresh_token,
-            googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000, 
+            googleExpiresAt: Date.now() + refreshedTokens.expires_in * 1000,
           },
           { merge: true },
         );

@@ -14,14 +14,15 @@ const Queue = () => {
   if (!session) {
     return <p>Please log in to see your Spotify queue.</p>;
   }
-  if (errorQueue) return <p className="flex justify-center pt-[1vh]">{errorQueue}</p>;
+  if (errorQueue)
+    return <p className="flex justify-center pt-[1vh]">{errorQueue}</p>;
   if (errorCurrPlay)
     return <p className="flex justify-center pt-[1vh]">{errorCurrPlay}</p>;
 
   return (
     <div className="rounded-lg py-4 text-dash-orange-100 drop-shadow-xl">
       {currentTrack && (
-        <div className="flex flex-col items-center justify-center text-center px-[0.2vw]">
+        <div className="flex flex-col items-center justify-center px-[0.2vw] text-center">
           {currentTrack.item.album.images?.[0]?.url ? (
             <Image
               src={currentTrack.item.album.images[0].url}
