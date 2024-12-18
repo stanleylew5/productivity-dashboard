@@ -30,7 +30,7 @@ Displays the current time and time zone information based on user preferences.
 
 Manage your work sessions effectively with an integrated Pomodoro timer that helps you maintain focus and take regular breaks.
 
-### Spotify API Integration (Coming Soon)
+### Spotify API Integration
 
 Control your Spotify queue, play, and pause music directly from the dashboard.
 
@@ -51,3 +51,4 @@ Control your Spotify queue, play, and pause music directly from the dashboard.
 - [Time API](https://timeapi.io/)
 - [Weather API](https://www.weatherapi.com/)
 - [Google Calendar API](https://developers.google.com/calendar/api/guides/overview)
+- [Spotify Web API](https://developer.spotify.com/documentation/web-api)
